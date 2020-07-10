@@ -1,0 +1,9 @@
+#Make files
+*.bat
+
+#Executables
+*.exe
+*.o
+
+#Compiler rip
+.vscode/
