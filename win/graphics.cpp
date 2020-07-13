@@ -13,7 +13,7 @@ HANDLE hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
 monstream::monstream() : x(0), y(0), curHeight(0), maxWidth(0), maxHeight(0), m(FOREGROUND) {
     buf.push_back({});
-    buf[0].push_back({"", {std::nullopt, std::nullopt}});
+    buf[0].push_back({"", {WHITE, BLACK}});//TODO: make this work well with a changing default and copying
     lens.push_back(0);
 }
 
@@ -70,7 +70,7 @@ monstream& monstream::operator<<(const std::string& s) {
             lens.push_back(x);
         }
         int index = buf[y+i].size()-1;
-        buf[y+i][index].first += lines[i];
+        buf[y+i][index].first += lines[i];//Here
         lens[y+i] += length(lines[i]);
         if(lens[y+i]-x > maxWidth) {
             maxWidth = lens[y+i]-x;
@@ -95,12 +95,45 @@ monstream& monstream::operator<<(const color& c) {
         return (*this) << context(std::nullopt, c);
 }
 
+monstream& monstream::operator<<(const monstream& m) {
+    if(&m == this) {
+        int size = buf.size();
+        int size2 = buf[size-1].size()-1;
+        text fin = buf[size-1][size2];
+        for(int i = 0; i < size; ++i) {
+            int in = buf[i].size()-1;
+            if(i == size-1) {
+                --in;
+            }
+            for(int j = 0; j < in; ++j) {
+                (*this) << buf[i][j].second;
+                (*this) << buf[i][j].first;
+            }
+            (*this) << "\n";
+        }
+        (*this) << fin.second;
+        (*this) << fin.first;
+    } else {
+        for(int i = 0; i<m.buf.size(); ++i) {
+            for(int j = 0; j<m.buf[i].size(); ++j) {
+                (*this) << m.buf[i][j].second;
+                (*this) << m.buf[i][j].first;
+            }
+            (*this) << "\n";
+        }
+    }
+    return *this;
+}
+
 void monstream::newline() {
     space();
     curHeight += maxHeight;
     y = curHeight;
-    maxHeight = 0;
+    maxHeight = 1;
     x = 0;
+    buf.push_back({});
+    buf[curHeight].push_back({fill(x), {std::nullopt, std::nullopt}});
+    lens.push_back(x);
 }
 
 void monstream::space() {

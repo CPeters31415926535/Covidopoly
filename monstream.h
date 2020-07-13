@@ -62,6 +62,7 @@ namespace cov {
             monstream& operator<<(const context& a);
             monstream& operator<<(const mode& a);
             monstream& operator<<(const color& a);
+            monstream& operator<<(const monstream& m);
 
             void newline();
             void space();
