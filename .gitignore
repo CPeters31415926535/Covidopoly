@@ -4,6 +4,8 @@
 #Executables
 *.exe
 *.o
+*.d
+/lib
 
 #Compiler rip
 .vscode/
