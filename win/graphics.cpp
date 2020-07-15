@@ -70,7 +70,7 @@ monstream& monstream::operator<<(const std::string& s) {
             lens.push_back(x);
         }
         int index = buf[y+i].size()-1;
-        buf[y+i][index].first += lines[i];//Here
+        buf[y+i][index].first += lines[i];
         lens[y+i] += length(lines[i]);
         if(lens[y+i]-x > maxWidth) {
             maxWidth = lens[y+i]-x;
