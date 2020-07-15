@@ -5,24 +5,24 @@ MKDIR := lib
 DEPDIR := $(MKDIR)/.dep
 
 src := $(wildcard *.cpp) $(wildcard win/*.cpp)
-obj = $(addprefix $(MKDIR)/,$(src:.cpp=.o))
-dep = $(addprefix $(DEPDIR)/,$(src:.cpp=.d))
+obj := $(addprefix $(MKDIR)/,$(src:.cpp=.o))
+dep := $(addprefix $(DEPDIR)/,$(src:.cpp=.d))
 
 #LDFLAGS = -lGL -lglut -lpng -lz -lm
 
-CXXFlAGS += -std=c++17
+CXXFlAGS = -std=c++17
 
 myprog: $(obj)
-	$(CXX) -std=c++17 -o a $^ $(LDFLAGS)
+	$(CXX) -std=c++17 -o a.exe $^ $(LDFLAGS)
+                                                                                     
+$(MKDIR)/%.o: %.cpp
+	$(CXX) -std=c++17 -c -o $@ $< $(LDFLAGS)
 
 -include $(dep)
 
-$(MKDIR)/%.o: %.cpp
-	$(CXX) -std=c++17 -c -o $@ $^ $(LDFLAGS)
-
 $(DEPDIR)/%.d: %.cpp
-	$(CXX) $(CFLAGS) $< -MM -MT $(@:.d=.o) >$@
+	$(CXX) -std=c++17 $< -MMD -MT $(@:$(DEPDIR)/%.d=$(MKDIR)/%.o) -MF $@
 
 .PHONY: clean
 clean:
-	rm -f $(obj) myprog
+	rm -f $(obj) a.exe
