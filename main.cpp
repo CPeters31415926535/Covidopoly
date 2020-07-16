@@ -2,6 +2,8 @@
 
 #include "monstream.h"
 #include "deck.h"
+#include "menu.h"
+#include "menu.h"
 
 using namespace std;
 
@@ -31,18 +33,12 @@ int main() {/*
     m2.space();
     m2 << m;
     m2.flush();*/
-    cov::deck<int> d({1, 1, 2, 3, 4, 5, 6});
-    d.draw();
-    d.remove();
-    d.draw();
-    d.remove();
-    for(int i = 0; i < 20; ++i) {
-        d.print();
-        std::cout << '\n' << *(d.draw()) << '\n';
-    }
-    d.print();
-    std::cout << '\n';
-    d.reinsert(1);
-    d.print();
+    cov::menu m;
+    cov::monstream m2;
+    m.addOption(new cov::default_menu_item("Quit"));
+    m.addOption(new cov::default_menu_item("Double quit"));
+    m.addOption(new cov::default_menu_item("Triple quit"));
+    m.display()->write(m2);
+    m2.flush();
     return 0;
 }
